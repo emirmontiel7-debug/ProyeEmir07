@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether Bank | Banca Digital de Alta Precision</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+
+        <!-- HEADER / NAVIGATION -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="brand-name">AETHER<span class="brand-highlight">BANK</span></span>
+                        <span class="brand-tag">NeónSPEI • v3.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <!-- Direct Simulator Trigger Button -->
+                <button class="btn btn-sim-incoming" id="openSimTrigger">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                    <span>Simular Entrada SPEI</span>
+                    <span class="badge-live">ENVÍO EN VIVO</span>
+                </button>
+
+                <button class="btn-icon" id="toggleBalancePrivacy" title="Ocultar/Mostrar Saldo">
+                    <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                </button>
+
+                <div class="user-pill">
+                    <div class="avatar">
+                        <span>EU</span>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Emir User</span>
+                        <span class="account-type">Cuenta Nivel 4 (SPEI)</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="dashboard-grid">
+
+            <!-- LEFT COLUMN: CARDS & BALANCE -->
+            <section class="dash-column left-col">
+                
+                <!-- SALDO TOTAL CARD -->
+                <div class="glass-card balance-card">
+                    <div class="card-header-sm">
+                        <span class="text-muted"><i class="fa-solid fa-wallet me-2"></i> Saldo Total Disponible</span>
+                        <span class="badge-status online"><i class="fa-solid fa-circle"></i> SPEI Activo</span>
+                    </div>
+                    
+                    <div class="balance-display">
+                        <span class="currency-symbol">$</span>
+                        <span class="balance-amount" id="mainBalance">3,000.00</span>
+                        <span class="currency-code">MXN</span>
+                    </div>
+
+                    <div class="clabe-snippet">
+                        <span class="clabe-label">CLABE Interbancaria:</span>
+                        <code id="displayClabe">012 180 01549283741 9</code>
+                        <button class="btn-copy" id="btnCopyClabe" title="Copiar CLABE">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <div class="balance-footer">
+                        <div class="stat-item">
+                            <span class="stat-title">Ingresos Hoy</span>
+                            <span class="stat-value text-emerald" id="todayIncome">+$0.00</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-title">Egresos Hoy</span>
+                            <span class="stat-value text-cyan" id="todayExpenses">-$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D INTERACTIVE BANK CARD -->
+                <div class="glass-card card-hub">
+                    <div class="card-hub-header">
+                        <h3><i class="fa-solid fa-credit-card me-2"></i> Mi Tarjeta Digital</h3>
+                        <button class="btn-text" id="toggleFreezeCard">
+                            <i class="fa-solid fa-snowflake" id="freezeIcon"></i>
+                            <span id="freezeText">Congelar</span>
+                        </button>
+                    </div>
+
+                    <!-- Visual Credit Card -->
+                    <div class="physical-card" id="virtualCard">
+                        <div class="card-background-glow"></div>
+                        <div class="card-top">
+                            <div class="card-brand">
+                                <i class="fa-solid fa-cube"></i> AETHER <span class="gold">BLACK</span>
+                            </div>
+                            <div class="contactless-icon">
+                                <i class="fa-solid fa-wifi"></i>
+                            </div>
+                        </div>
+
+                        <div class="card-chip">
+                            <div class="chip-lines"></div>
+                        </div>
+
+                        <div class="card-number" id="cardNumDisplay">
+                            4532 •••• •••• 8912
+                        </div>
+
+                        <div class="card-bottom">
+                            <div class="card-holder">
+                                <span class="card-label">TITULAR</span>
+                                <span class="holder-name">EMIR USER</span>
+                            </div>
+                            <div class="card-exp">
+                                <span class="card-label">VENCE</span>
+                                <span class="exp-date">08/30</span>
+                            </div>
+                            <div class="card-cvv">
+                                <span class="card-label">CVV</span>
+                                <span class="cvv-num" id="cvvDisplay">•••</span>
+                            </div>
+                            <div class="card-network">
+                                <i class="fa-brands fa-cc-visa"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn-card-opt" id="btnShowCardData">
+                            <i class="fa-solid fa-eye"></i> Ver Datos
+                        </button>
+                        <button class="btn-card-opt" id="btnResetAccount" title="Restablecer Saldo Didáctico a $3,000">
+                            <i class="fa-solid fa-rotate-left"></i> Reiniciar $3,000
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QUICK VAULT / CAJITA -->
+                <div class="glass-card vault-card">
+                    <div class="vault-info">
+                        <div class="vault-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                        <div>
+                            <h4>Cajita Rendimiento (15% APR)</h4>
+                            <p class="text-muted text-sm">Gana rendimientos diarios con disponibilidad 24/7</p>
+                        </div>
+                    </div>
+                    <div class="vault-amount">$0.00 MXN</div>
+                </div>
+
+            </section>
+
+            <!-- RIGHT COLUMN: ACTIONS, QUICK SIMULATOR & HISTORIAL -->
+            <section class="dash-column right-col">
+
+                <!-- QUICK ACTION BUTTONS -->
+                <div class="action-grid">
+                    <button class="action-btn primary-action" id="btnOpenSendModal">
+                        <div class="action-icon btn-gradient-send">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </div>
+                        <span class="action-title">Transferir</span>
+                        <span class="action-sub">Enviar dinero SPEI</span>
+                    </button>
+
+                    <button class="action-btn" id="btnOpenReceiveModal">
+                        <div class="action-icon btn-gradient-receive">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <span class="action-title">Recibir / QR</span>
+                        <span class="action-sub">Datos de depósito</span>
+                    </button>
+
+                    <button class="action-btn" id="btnOpenSimDrawer">
+                        <div class="action-icon btn-gradient-sim">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <span class="action-title">Otros Bancos</span>
+                        <span class="action-sub">Simular depósito</span>
+                    </button>
+
+                    <button class="action-btn" id="btnOpenReceiptsArchive">
+                        <div class="action-icon btn-gradient-docs">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <span class="action-title">Comprobantes</span>
+                        <span class="action-sub">Descargar / Imprimir</span>
+                    </button>
+                </div>
+
+                <!-- LIVE SPEI SIMULATOR CARD (DIDACTICO DE OTROS BANCOS) -->
+                <div class="glass-card sim-card" id="simCardPanel">
+                    <div class="sim-header">
+                        <div class="sim-title">
+                            <i class="fa-solid fa-wand-magic-sparkles text-emerald"></i>
+                            <span>Simulador Didáctico de Transferencias Entrantes</span>
+                        </div>
+                        <span class="badge-info">PROBAR OTROS BANCOS</span>
+                    </div>
+                    <p class="sim-desc">
+                        Recibe transferencias simuladas de otros bancos para poner a prueba tu saldo, notificaciones y comprobantes en tiempo real.
+                    </p>
+
+                    <div class="quick-bank-chips">
+                        <button class="chip-bank" data-bank="BBVA" data-name="Carlos Ramírez" data-amount="500">
+                            <span class="bank-dot bbva"></span> BBVA +$500
+                        </button>
+                        <button class="chip-bank" data-bank="Nu Bank" data-name="María Fernanda" data-amount="1200">
+                            <span class="bank-dot nu"></span> Nu +$1,200
+                        </button>
+                        <button class="chip-bank" data-bank="Santander" data-name="Alejandro Gomez" data-amount="850">
+                            <span class="bank-dot santander"></span> Santander +$850
+                        </button>
+                        <button class="chip-bank" data-bank="Mercado Pago" data-name="Tienda Digital" data-amount="350">
+                            <span class="bank-dot mp"></span> Mercado Pago +$350
+                        </button>
+                        <button class="chip-bank" data-bank="Citibanamex" data-name="Roberto Silva" data-amount="2000">
+                            <span class="bank-dot banamex"></span> Citibanamex +$2,000
+                        </button>
+                    </div>
+
+                    <!-- Custom Simulation Form -->
+                    <form id="customSimForm" class="custom-sim-row">
+                        <select id="simBankSelect" required>
+                            <option value="BBVA">BBVA México</option>
+                            <option value="Nu Bank">Nu México</option>
+                            <option value="Santander">Santander</option>
+                            <option value="Mercado Pago">Mercado Pago STIC</option>
+                            <option value="Banorte">Banorte / Ixe</option>
+                            <option value="Citibanamex">Citibanamex</option>
+                            <option value="HSBC">HSBC México</option>
+                            <option value="Banco Azteca">Banco Azteca</option>
+                            <option value="Scotiabank">Scotiabank</option>
+                        </select>
+                        <input type="text" id="simSenderInput" placeholder="Nombre Emisor" value="Juan Pérez" required>
+                        <input type="number" id="simAmountInput" placeholder="Monto $" value="1000" min="1" step="0.01" required>
+                        <button type="submit" class="btn btn-sim-submit">
+                            <i class="fa-solid fa-arrow-down-left"></i> Recibir
+                        </button>
+                    </form>
+                </div>
+
+                <!-- TRANSACTION HISTORY -->
+                <div class="glass-card history-card">
+                    <div class="history-header">
+                        <div class="history-title-group">
+                            <h3><i class="fa-solid fa-clock-rotate-left me-2"></i> Movimientos Recientes</h3>
+                            <span class="badge-count" id="txCount">0 movimientos</span>
+                        </div>
+                        <div class="history-controls">
+                            <input type="text" id="searchTx" placeholder="Buscar por concepto o banco..." class="input-search">
+                            <select id="filterTxType" class="select-filter">
+                                <option value="all">Todos</option>
+                                <option value="received">Recibidos</option>
+                                <option value="sent">Enviados</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="tx-list-container" id="txListContainer">
+                        <!-- Dynamic transaction items injected via JS -->
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- 1. SEND TRANSFER MODAL -->
+    <div class="modal-overlay" id="modalSendTransfer">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <div class="modal-icon-badge send-theme">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                    <div>
+                        <h2>Realizar Transferencia SPEI</h2>
+                        <p class="modal-subtitle">Envía dinero de forma inmediata 24/7 sin comisión</p>
+                    </div>
+                </div>
+                <button class="btn-close-modal" class="closeModalBtn" data-target="modalSendTransfer">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- STEP 1: BANK & RECIPIENT -->
+                <div class="transfer-step step-active" id="sendStep1">
+                    <label class="form-label">1. Selecciona el Banco Destino:</label>
+                    <div class="bank-grid" id="bankPickerGrid">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="recipientClabe">CLABE / Tarjeta / Teléfono (18, 16 o 10 dígitos):</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-hashtag"></i>
+                            <input type="text" id="recipientClabe" placeholder="Ej. 012 180 01549283741 9" maxlength="20" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipientName">Nombre Completo del Beneficiario:</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="recipientName" placeholder="Ej. Laura Martínez Gómez" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary closeModalBtn" data-target="modalSendTransfer">Cancelar</button>
+                        <button class="btn btn-primary" id="btnNextStep2">Continuar a Monto <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: AMOUNT & CONCEPT -->
+                <div class="transfer-step" id="sendStep2">
+                    <div class="current-balance-reminder">
+                        <span>Saldo disponible: <strong id="step2AvailableBalance">$3,000.00 MXN</strong></span>
+                    </div>
+
+                    <div class="amount-input-box">
+                        <label class="amount-label">Monto a Enviar ($ MXN):</label>
+                        <div class="amount-field-wrapper">
+                            <span class="dollar-sign">$</span>
+                            <input type="number" id="sendAmountInput" placeholder="0.00" min="1" step="0.01" required>
+                        </div>
+
+                        <div class="quick-amounts">
+                            <button type="button" class="btn-quick-amount" data-val="100">+$100</button>
+                            <button type="button" class="btn-quick-amount" data-val="500">+$500</button>
+                            <button type="button" class="btn-quick-amount" data-val="1000">+$1,000</button>
+                            <button type="button" class="btn-quick-amount" data-val="3000">Todo ($3,000)</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="sendConceptInput">Concepto de Pago (Aparece en el comprobante):</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <input type="text" id="sendConceptInput" placeholder="Ej. Pago de colegiatura, Renta, Cena" value="Transferencia SPEI" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendRefInput">Número de Referencia (7 dígitos):</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-barcode"></i>
+                            <input type="text" id="sendRefInput" placeholder="1234567" maxlength="7" value="1234567">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="btnBackStep1"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                        <button class="btn btn-primary btn-emerald" id="btnNextStep3">Verificar y Autorizar <i class="fa-solid fa-lock"></i></button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SECURITY AUTHENTICATION (DIDACTIC PIN / BIOMETRIC) -->
+                <div class="transfer-step" id="sendStep3">
+                    <div class="auth-box">
+                        <div class="auth-icon-pulse">
+                            <i class="fa-solid fa-fingerprint"></i>
+                        </div>
+                        <h3>Autorización de Seguridad SPEI</h3>
+                        <p class="text-muted text-center">Introduce tu NIP de 4 dígitos o presiona el sensor biométrico para confirmar la transferencia.</p>
+
+                        <div class="summary-card">
+                            <div class="summary-row">
+                                <span>Destino:</span>
+                                <strong id="summaryBank">BBVA</strong>
+                            </div>
+                            <div class="summary-row">
+                                <span>Beneficiario:</span>
+                                <strong id="summaryName">Laura Martínez</strong>
+                            </div>
+                            <div class="summary-row highlight-row">
+                                <span>Monto total:</span>
+                                <strong id="summaryAmount" class="text-emerald">$500.00 MXN</strong>
+                            </div>
+                        </div>
+
+                        <!-- PIN keypad -->
+                        <div class="pin-display" id="pinDisplay">
+                            <span class="pin-dot"></span>
+                            <span class="pin-dot"></span>
+                            <span class="pin-dot"></span>
+                            <span class="pin-dot"></span>
+                        </div>
+
+                        <div class="pin-keypad">
+                            <button class="key-btn" data-key="1">1</button>
+                            <button class="key-btn" data-key="2">2</button>
+                            <button class="key-btn" data-key="3">3</button>
+                            <button class="key-btn" data-key="4">4</button>
+                            <button class="key-btn" data-key="5">5</button>
+                            <button class="key-btn" data-key="6">6</button>
+                            <button class="key-btn" data-key="7">7</button>
+                            <button class="key-btn" data-key="8">8</button>
+                            <button class="key-btn" data-key="9">9</button>
+                            <button class="key-btn key-clear" id="btnPinClear"><i class="fa-solid fa-delete-left"></i></button>
+                            <button class="key-btn" data-key="0">0</button>
+                            <button class="key-btn key-confirm" id="btnAutoBioAuth" title="Autorizar con Huella"><i class="fa-solid fa-fingerprint"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="btnBackStep2">Modificar Datos</button>
+                        <button class="btn btn-success" id="btnExecuteTransfer">
+                            <i class="fa-solid fa-check"></i> Transferir Ahora
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. RECEIVE MONEY & QR MODAL -->
+    <div class="modal-overlay" id="modalReceiveMoney">
+        <div class="modal-box modal-md">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <div class="modal-icon-badge receive-theme">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <div>
+                        <h2>Datos para Recibir Transferencia</h2>
+                        <p class="modal-subtitle">Proporciona estos datos a cualquier persona o banco</p>
+                    </div>
+                </div>
+                <button class="btn-close-modal closeModalBtn" data-target="modalReceiveMoney">&times;</button>
+            </div>
+
+            <div class="modal-body text-center">
+                <!-- QR Visual -->
+                <div class="qr-container">
+                    <div class="qr-box" id="qrCodeWrapper">
+                        <!-- Dynamic SVG QR Code generated in JS -->
+                    </div>
+                    <span class="qr-tag">AETHER SPEI DIRECT QR</span>
+                </div>
+
+                <div class="account-details-card">
+                    <div class="detail-row">
+                        <span class="label">Banco Destino:</span>
+                        <strong class="val"><i class="fa-solid fa-building-columns me-1"></i> AETHER BANK (STP / SPEI)</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Titular:</span>
+                        <strong class="val">EMIR USER</strong>
+                    </div>
+                    <div class="detail-row highlight">
+                        <span class="label">CLABE Interbancaria (18 dígitos):</span>
+                        <div class="clabe-copy-box">
+                            <code id="modalClabeVal">012 180 01549283741 9</code>
+                            <button class="btn-copy-lg" id="btnCopyClabeModal">
+                                <i class="fa-solid fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Número de Cuenta / Tarjeta:</span>
+                        <strong class="val">4532 8910 2345 8912</strong>
+                    </div>
+                </div>
+
+                <div class="sim-prompt-box">
+                    <p><i class="fa-solid fa-circle-info text-cyan"></i> ¿Quieres probar la recepción ahora mismo?</p>
+                    <button class="btn btn-secondary btn-sm" id="btnTriggerSimFromModal">
+                        <i class="fa-solid fa-play"></i> Simular Transferencia Entrante
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-primary closeModalBtn" data-target="modalReceiveMoney">Listo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. REALISTIC SPEI / CEP RECEIPT MODAL (IMPRIMIBLE Y DIDÁCTICO) -->
+    <div class="modal-overlay" id="modalReceipt">
+        <div class="modal-box modal-receipt-box">
+            
+            <div class="receipt-top-actions no-print">
+                <span class="receipt-badge"><i class="fa-solid fa-shield-halved"></i> COMPROBANTE OFICIAL SPEI BANXICO</span>
+                <div class="action-buttons">
+                    <button class="btn btn-print-receipt" id="btnPrintReceipt">
+                        <i class="fa-solid fa-print"></i> Imprimir Comprobante
+                    </button>
+
+                    <button class="btn btn-share-receipt" id="btnShareReceipt">
+                        <i class="fa-solid fa-download"></i> Guardar / Compartir
+                    </button>
+
+                    <button class="btn-close-modal closeModalBtn" data-target="modalReceipt">&times;</button>
+                </div>
+            </div>
+
+            <!-- PRINTABLE RECEIPT CONTENT AREA -->
+            <div class="printable-receipt-document" id="printableReceiptArea">
+                
+                <!-- RECEIPT HEADER BANNER -->
+                <div class="receipt-header-banner">
+                    <div class="r-brand">
+                        <i class="fa-solid fa-cube"></i>
+                        <div>
+                            <div class="r-bank-name">AETHER BANK S.A.</div>
+                            <div class="r-sub">INSTITUCIÓN DE BANCA MÚLTIPLE</div>
+                        </div>
+                    </div>
+                    <div class="r-spei-logo">
+                        <div class="spei-pill">SPEI</div>
+                        <span>Comprobante Electrónico de Pago</span>
+                    </div>
+                </div>
+
+                <div class="receipt-status-bar">
+                    <div class="r-status-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="r-status-info">
+                        <span class="r-status-title">OPERACIÓN LIQUIDADA Y EXITOSA</span>
+                        <span class="r-status-sub">El pago fue procesado correctamente por el Sistema de Pagos Electrónicos Interbancarios (SPEI®).</span>
+                    </div>
+                </div>
+
+                <!-- AMOUNT BIG HERO -->
+                <div class="receipt-amount-hero">
+                    <span class="r-amount-label">Monto de la Transferencia</span>
+                    <div class="r-amount-val" id="rcptAmount">$500.00 <span class="r-curr">MXN</span></div>
+                </div>
+
+                <!-- METADATA GRID -->
+                <div class="receipt-grid">
+                    <div class="receipt-block">
+                        <div class="r-block-title"><i class="fa-solid fa-user-arrow-up"></i> CUENTA ORDENANTE (EMISOR)</div>
+                        <div class="r-row">
+                            <span class="rk">Nombre:</span>
+                            <strong class="rv" id="rcptSenderName">EMIR USER</strong>
+                        </div>
+                        <div class="r-row">
+                            <span class="rk">Banco Origen:</span>
+                            <strong class="rv" id="rcptSenderBank">AETHER BANK (STP)</strong>
+                        </div>
+                        <div class="r-row">
+                            <span class="rk">CLABE / Cuenta:</span>
+                            <span class="rv" id="rcptSenderClabe">012 180 01549283741 9</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-block">
+                        <div class="r-block-title"><i class="fa-solid fa-user-arrow-down"></i> CUENTA BENEFICIARIA (RECEPTOR)</div>
+                        <div class="r-row">
+                            <span class="rk">Nombre:</span>
+                            <strong class="rv" id="rcptReceiverName">LAURA MARTÍNEZ</strong>
+                        </div>
+                        <div class="r-row">
+                            <span class="rk">Banco Destino:</span>
+                            <strong class="rv" id="rcptReceiverBank">BBVA MÉXICO</strong>
+                        </div>
+                        <div class="r-row">
+                            <span class="rk">CLABE / Cuenta:</span>
+                            <span class="rv" id="rcptReceiverClabe">012 180 00123456789 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRANSACTION DETAILS -->
+                <div class="receipt-details-list">
+                    <div class="r-det-item">
+                        <span class="rk">Clave de Rastreo SPEI:</span>
+                        <strong class="rv highlight-tracking" id="rcptTrackingKey">2026082640014SPEI0000849201</strong>
+                    </div>
+                    <div class="r-det-item">
+                        <span class="rk">Fecha y Hora de Operación:</span>
+                        <span class="rv" id="rcptDateTime">26 de Agosto de 2026, 19:30:15 hrs</span>
+                    </div>
+                    <div class="r-det-item">
+                        <span class="rk">Concepto de Pago:</span>
+                        <span class="rv" id="rcptConcept">Pago de servicios</span>
+                    </div>
+                    <div class="r-det-item">
+                        <span class="rk">Número de Referencia:</span>
+                        <span class="rv" id="rcptRef">1234567</span>
+                    </div>
+                    <div class="r-det-item">
+                        <span class="rk">Comisión SPEI:</span>
+                        <span class="rv text-emerald">$0.00 MXN (Sin Comisión)</span>
+                    </div>
+                    <div class="r-det-item">
+                        <span class="rk">IVA de la Comisión:</span>
+                        <span class="rv">$0.00 MXN</span>
+                    </div>
+                </div>
+
+                <!-- DIGITAL SEAL & QR VALIDATION -->
+                <div class="receipt-seal-section">
+                    <div class="seal-qr-wrapper" id="receiptQrValidation">
+                        <!-- Dynamic QR code for validation -->
+                    </div>
+                    <div class="seal-text-wrapper">
+                        <div class="seal-title">SELLO DIGITAL DE AUTENTICIDAD BANXICO / AETHER</div>
+                        <div class="seal-code" id="rcptDigitalSeal">
+                            ||012|STP|20260826|2026082640014SPEI0000849201|500.00|012180015492837419|AETHER|bbva|012180001234567890||4f8e9a1c2b3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0
+                        </div>
+                        <div class="seal-disclaimer">
+                            Este documento es una representación gráfica oficial de un pago realizado a través del SPEI®. Conserva este comprobante para aclarar cualquier aclaración futura.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER WATERMARK -->
+                <div class="receipt-footer">
+                    <span>Aether Bank México S.A. • RFC: AET260826K91 • Línea de Atención 800-AETHER-00</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- CONFETTI CANVAS -->
+    <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+    <!-- JS Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/transfers.js"></script>
+    <script src="js/receipt.js"></script>
+</body>
+</html>
