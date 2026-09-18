@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Punto de Venta profesional para ferretería. Gestión de ventas, inventario, reportes y más.">
+    <title>🔧 Ferretería Pro - Punto de Venta</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- ═══════════════════════════════════ -->
+        <!-- SIDEBAR DE NAVEGACIÓN -->
+        <!-- ═══════════════════════════════════ -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">🔧</span>
+                <h1>Ferretería Pro</h1>
+                <span class="logo-subtitle">Punto de Venta</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Principal</div>
+                
+                <div class="nav-item active" data-view="ventas" onclick="switchView('ventas')">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">Ventas</span>
+                    <span class="kbd">F1</span>
+                </div>
+                
+                <div class="nav-item" data-view="dashboard" onclick="switchView('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                    <span class="kbd">F2</span>
+                </div>
+
+                <div class="nav-section-title">Gestión</div>
+                
+                <div class="nav-item" data-view="historial" onclick="switchView('historial')">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Historial</span>
+                    <span class="nav-badge" id="salesBadge" style="display:none;">0</span>
+                    <span class="kbd">F3</span>
+                </div>
+                
+                <div class="nav-item" data-view="corte" onclick="switchView('corte')">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Corte de Caja</span>
+                    <span class="kbd">F4</span>
+                </div>
+
+                <div class="nav-section-title">Categorías</div>
+
+                <div class="nav-item" onclick="filterByCategory('all'); switchView('ventas');">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Todos</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('herramientas-manuales'); switchView('ventas');">
+                    <span class="nav-icon">🔨</span>
+                    <span class="nav-text">Htas. Manuales</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('herramientas-electricas'); switchView('ventas');">
+                    <span class="nav-icon">⚡</span>
+                    <span class="nav-text">Htas. Eléctricas</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('tornilleria'); switchView('ventas');">
+                    <span class="nav-icon">🔩</span>
+                    <span class="nav-text">Tornillería</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('pintura'); switchView('ventas');">
+                    <span class="nav-icon">🎨</span>
+                    <span class="nav-text">Pintura</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('electricidad'); switchView('ventas');">
+                    <span class="nav-icon">💡</span>
+                    <span class="nav-text">Electricidad</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('plomeria'); switchView('ventas');">
+                    <span class="nav-icon">🚿</span>
+                    <span class="nav-text">Plomería</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('cerrajeria'); switchView('ventas');">
+                    <span class="nav-icon">🔐</span>
+                    <span class="nav-text">Cerrajería</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('adhesivos'); switchView('ventas');">
+                    <span class="nav-icon">🧴</span>
+                    <span class="nav-text">Adhesivos</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('jardineria'); switchView('ventas');">
+                    <span class="nav-icon">🌿</span>
+                    <span class="nav-text">Jardinería</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('construccion'); switchView('ventas');">
+                    <span class="nav-icon">🧱</span>
+                    <span class="nav-text">Construcción</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('seguridad'); switchView('ventas');">
+                    <span class="nav-icon">🦺</span>
+                    <span class="nav-text">Seguridad</span>
+                </div>
+
+                <div class="nav-item" onclick="filterByCategory('iluminacion'); switchView('ventas');">
+                    <span class="nav-icon">💡</span>
+                    <span class="nav-text">Iluminación</span>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="clock-display" id="clock">00:00:00</div>
+                <div class="date-display" id="dateDisplay">Cargando...</div>
+            </div>
+        </aside>
+
+        <!-- ═══════════════════════════════════ -->
+        <!-- CONTENIDO PRINCIPAL -->
+        <!-- ═══════════════════════════════════ -->
+        <main class="main-content">
+
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" 
+                           placeholder="Buscar producto por nombre, código o categoría... (F5)" 
+                           autocomplete="off">
+                </div>
+                <div class="top-bar-actions">
+                    <button class="top-bar-btn active-view" onclick="switchView('ventas')" title="Ventas (F1)">🛒</button>
+                    <button class="top-bar-btn" onclick="switchView('dashboard')" title="Dashboard (F2)">📊</button>
+                    <button class="top-bar-btn" onclick="switchView('historial')" title="Historial (F3)">📋</button>
+                    <button class="top-bar-btn" onclick="switchView('corte')" title="Corte de Caja (F4)">💰</button>
+                </div>
+            </header>
+
+            <!-- Category Pills -->
+            <div class="categories-bar">
+                <div class="category-pill active" data-category="all" onclick="filterByCategory('all')">
+                    <span class="pill-icon">📦</span> Todos
+                </div>
+                <div class="category-pill" data-category="herramientas-manuales" onclick="filterByCategory('herramientas-manuales')">
+                    <span class="pill-icon">🔨</span> Herramientas
+                </div>
+                <div class="category-pill" data-category="herramientas-electricas" onclick="filterByCategory('herramientas-electricas')">
+                    <span class="pill-icon">⚡</span> Eléctricas
+                </div>
+                <div class="category-pill" data-category="tornilleria" onclick="filterByCategory('tornilleria')">
+                    <span class="pill-icon">🔩</span> Tornillería
+                </div>
+                <div class="category-pill" data-category="pintura" onclick="filterByCategory('pintura')">
+                    <span class="pill-icon">🎨</span> Pintura
+                </div>
+                <div class="category-pill" data-category="electricidad" onclick="filterByCategory('electricidad')">
+                    <span class="pill-icon">💡</span> Electricidad
+                </div>
+                <div class="category-pill" data-category="plomeria" onclick="filterByCategory('plomeria')">
+                    <span class="pill-icon">🚿</span> Plomería
+                </div>
+                <div class="category-pill" data-category="cerrajeria" onclick="filterByCategory('cerrajeria')">
+                    <span class="pill-icon">🔐</span> Cerrajería
+                </div>
+                <div class="category-pill" data-category="adhesivos" onclick="filterByCategory('adhesivos')">
+                    <span class="pill-icon">🧴</span> Adhesivos
+                </div>
+                <div class="category-pill" data-category="jardineria" onclick="filterByCategory('jardineria')">
+                    <span class="pill-icon">🌿</span> Jardinería
+                </div>
+                <div class="category-pill" data-category="construccion" onclick="filterByCategory('construccion')">
+                    <span class="pill-icon">🧱</span> Construcción
+                </div>
+                <div class="category-pill" data-category="seguridad" onclick="filterByCategory('seguridad')">
+                    <span class="pill-icon">🦺</span> Seguridad
+                </div>
+                <div class="category-pill" data-category="iluminacion" onclick="filterByCategory('iluminacion')">
+                    <span class="pill-icon">💡</span> Iluminación
+                </div>
+            </div>
+
+            <!-- ═══ Vista de Ventas ═══ -->
+            <div class="content-area" id="salesView" style="display: flex;">
+                <section class="products-section">
+                    <div class="products-header">
+                        <div>
+                            <h2 id="productsHeaderText">Todos los Productos</h2>
+                            <span class="product-count" id="productCount">150 productos</span>
+                        </div>
+                    </div>
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products rendered by JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- ═══ Vista Dashboard ═══ -->
+            <div class="view-container" id="dashboardView">
+                <h1 class="view-title">📊 Dashboard de Ventas</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="statTodayTotal">$0.00</div>
+                        <div class="stat-label">Ventas de Hoy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🧾</div>
+                        <div class="stat-value" id="statTransactions">0</div>
+                        <div class="stat-label">Transacciones</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value" id="statAvgTicket">$0.00</div>
+                        <div class="stat-label">Ticket Promedio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value" id="statItemsSold">0</div>
+                        <div class="stat-label">Artículos Vendidos</div>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>🏆 Productos Más Vendidos</h3>
+                        <div class="chart-bar-container" id="topProductsChart">
+                            <div class="empty-state" style="padding: 20px;">
+                                <div class="empty-icon" style="font-size: 2rem;">📊</div>
+                                <p>Sin datos aún</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-card">
+                        <h3>💳 Métodos de Pago</h3>
+                        <div class="chart-bar-container" id="paymentMethodsChart">
+                            <div class="empty-state" style="padding: 20px;">
+                                <div class="empty-icon" style="font-size: 2rem;">💳</div>
+                                <p>Sin datos aún</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ Vista Historial ═══ -->
+            <div class="view-container" id="historyView">
+                <h1 class="view-title">📋 Historial de Ventas</h1>
+                
+                <div class="sales-table-container">
+                    <table class="sales-table">
+                        <thead>
+                            <tr>
+                                <th>Ticket</th>
+                                <th>Fecha / Hora</th>
+                                <th>Artículos</th>
+                                <th>Método</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesHistoryBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📋</div>
+                                        <h3>Sin ventas registradas</h3>
+                                        <p>Las ventas aparecerán aquí conforme se registren</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ Vista Corte de Caja ═══ -->
+            <div class="view-container" id="cashCutView">
+                <h1 class="view-title">💰 Corte de Caja</h1>
+                
+                <div class="cash-cut-summary">
+                    <div class="cut-card highlight">
+                        <div class="cut-value" id="cutTotalSales">$0.00</div>
+                        <div class="cut-label">Total de Ventas del Día</div>
+                    </div>
+                    <div class="cut-card">
+                        <div class="cut-value" id="cutTransactions">0</div>
+                        <div class="cut-label">Transacciones</div>
+                    </div>
+                    <div class="cut-card">
+                        <div class="cut-value" id="cutCash">$0.00</div>
+                        <div class="cut-label">💵 Efectivo</div>
+                    </div>
+                    <div class="cut-card">
+                        <div class="cut-value" id="cutCard">$0.00</div>
+                        <div class="cut-label">💳 Tarjeta</div>
+                    </div>
+                    <div class="cut-card">
+                        <div class="cut-value" id="cutTransfer">$0.00</div>
+                        <div class="cut-label">📱 Transferencia</div>
+                    </div>
+                    <div class="cut-card">
+                        <div class="cut-value" id="cutAvgTicket">$0.00</div>
+                        <div class="cut-label">Ticket Promedio</div>
+                    </div>
+                    <div class="cut-card">
+                        <div class="cut-value" id="cutItemsSold">0</div>
+                        <div class="cut-label">Artículos Vendidos</div>
+                    </div>
+                </div>
+
+                <div class="sales-table-container">
+                    <table class="sales-table">
+                        <thead>
+                            <tr>
+                                <th>Ticket</th>
+                                <th>Hora</th>
+                                <th>Método</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cutSalesBody">
+                            <tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">Sin ventas hoy</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ═══════════════════════════════════ -->
+        <!-- CARRITO LATERAL -->
+        <!-- ═══════════════════════════════════ -->
+        <aside class="cart-sidebar">
+            <div class="cart-header">
+                <h2>🛒 Carrito <span class="cart-count" id="cartCount">0</span></h2>
+                <button class="cart-clear-btn" onclick="clearCart()">Limpiar</button>
+            </div>
+
+            <div class="cart-items" id="cartItems">
+                <div class="cart-empty">
+                    <div class="empty-icon">🛒</div>
+                    <p>El carrito está vacío</p>
+                    <p style="font-size: 0.72rem; margin-top: 8px; color: var(--text-muted);">
+                        Selecciona productos para comenzar
+                    </p>
+                </div>
+            </div>
+
+            <div class="cart-footer">
+                <!-- Descuento -->
+                <div class="discount-input-row">
+                    <input type="number" id="discountInput" placeholder="Descuento" min="0" step="1">
+                    <select id="discountType">
+                        <option value="percent">%</option>
+                        <option value="fixed">$</option>
+                    </select>
+                </div>
+
+                <!-- Resumen -->
+                <div class="cart-summary">
+                    <div class="cart-summary-row subtotal">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal">$0.00</span>
+                    </div>
+                    <div class="cart-summary-row discount">
+                        <span>Descuento</span>
+                        <span id="cartDiscount">-$0.00</span>
+                    </div>
+                    <div class="cart-summary-row total">
+                        <span>Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Métodos de pago -->
+                <div class="payment-methods">
+                    <button class="payment-btn active" data-method="cash" onclick="selectPaymentMethod('cash')">
+                        💵 Efectivo
+                    </button>
+                    <button class="payment-btn" data-method="card" onclick="selectPaymentMethod('card')">
+                        💳 Tarjeta
+                    </button>
+                    <button class="payment-btn" data-method="transfer" onclick="selectPaymentMethod('transfer')">
+                        📱 Transferencia
+                    </button>
+                </div>
+
+                <!-- Botón de cobrar -->
+                <button class="checkout-btn" id="checkoutBtn" onclick="processCheckout()" disabled>
+                    💲 COBRAR <span style="font-size: 0.72rem; opacity: 0.7;">(F12)</span>
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- MODAL -->
+    <!-- ═══════════════════════════════════ -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/sales.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
